@@ -105,13 +105,28 @@ var APlayer = function() {
     this.currentCharacter = -1;
     this.changeCharacter();
     
+    this.maxHealth = 3;
+    this.health = this.maxHealth;
+    
     this.backToStart();
+    
     this.upcomingMove = null;
     this.moveCooldown = 0;
     this.moveCooldownTime = 0.25;
 }
 APlayer.prototype = Object.create(Mortal.prototype);
 APlayer.prototype.constructor = APlayer;
+
+APlayer.prototype.renderPlayerElements = function() {
+    this.render();
+    this.renderHealth();
+}
+
+APlayer.prototype.renderHealth = function() {
+    for(h = 1; h <= this.health; h++) {
+        ctx.drawImage(Resources.get('images/Heart.png'), canvas.width - (22 * h), 0, 20, 34);
+    }
+}
 
 // Update the player's position
 // Parameter: dt, a time delta between ticks

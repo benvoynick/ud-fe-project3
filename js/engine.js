@@ -159,7 +159,7 @@ var Engine = (function(global) {
             enemy.render();
         });
 
-        player.render();
+        player.renderPlayerElements();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -186,6 +186,7 @@ var Engine = (function(global) {
         'images/char-horn-girl.png',
         'images/char-pink-girl.png',
         'images/char-princess-girl.png',
+        'images/Heart.png',
         'images/Gem Green.png'
     ]);
     Resources.onReady(init);
@@ -194,6 +195,7 @@ var Engine = (function(global) {
      * object when run in a browser) so that developer's can use it more easily
      * from within their app.js files.
      */
+    global.canvas = canvas;
     global.ctx = ctx;
     global.colWidth = colWidth;
     global.rowHeight = rowHeight;
