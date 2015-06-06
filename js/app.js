@@ -18,18 +18,29 @@ AGameState.prototype.respawnEnemies = function() {
     }
 }
 
+AGameState.prototype.resetEnemies = function() {
+    allEnemies = [];
+    for(e = 0; e < 3; e++) {
+        allEnemies[e] = new Enemy();
+    }
+}
+
 AGameState.prototype.nextLevel = function() {
     this.level++;
+    
+    if (this.level % 20 == 0) {
+        allEnemies.push(new Enemy());
+    }
     
     this.respawnEnemies();
 }
 
 AGameState.prototype.lose = function() {
     this.level = 1;
-    allEnemies = [];
-    for(e = 0; e < 3; e++) {
-        allEnemies[e] = new Enemy();
-    }
+    
+    this.resetEnemies();
+    
+    this.respawnEnemies();
 }
 
 
@@ -242,10 +253,10 @@ APlayer.prototype.die = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+var allEnemies = [];
 gameState = new AGameState();
 player = new APlayer();
-allEnemies = [];
-gameState.lose();
+gameState.resetEnemies();
 
 
 // This listens for key presses and sends the keys to your

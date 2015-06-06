@@ -170,7 +170,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        gameState.respawnEnemies();
+        gameState.lose();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
