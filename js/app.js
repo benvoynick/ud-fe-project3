@@ -12,8 +12,16 @@ AGameState.prototype.renderLevel = function() {
     ctx.restore();
 }
 
+AGameState.prototype.respawnEnemies = function() {
+    for(e = 0; e < allEnemies.length; e++) {
+        allEnemies[e].spawn();
+    }
+}
+
 AGameState.prototype.nextLevel = function() {
     this.level++;
+    
+    this.respawnEnemies();
 }
 
 AGameState.prototype.lose = function() {
