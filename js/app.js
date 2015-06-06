@@ -29,9 +29,23 @@ Enemy.prototype.update = function(dt) {
 
 
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+// The player
+var player = function() {
+    Mortal.call(this);
+}
+player.prototype = Object.create(Mortal.prototype);
+player.prototype.constructor = player;
+
+// Update the player's position
+// Parameter: dt, a time delta between ticks
+player.prototype.update = function(dt) {
+    
+}
+
+// Receive key input from event listener
+player.prototype.handleInput = function(keyPressed) {
+    
+}
 
 
 // Now instantiate your objects.
