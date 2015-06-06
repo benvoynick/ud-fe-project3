@@ -16,6 +16,10 @@ AGameState.prototype.nextLevel = function() {
     this.level++;
 }
 
+AGameState.prototype.lose = function() {
+    this.level = 1;
+}
+
 
 
 var Mortal = function() {
@@ -215,6 +219,7 @@ APlayer.prototype.die = function() {
         this.health--;
     }
     else {
+        gameState.lose();
         this.health = this.maxHealth;
         this.changeCharacter();
     }
