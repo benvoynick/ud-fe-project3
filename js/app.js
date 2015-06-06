@@ -105,8 +105,7 @@ var APlayer = function() {
     this.currentCharacter = -1;
     this.changeCharacter();
     
-    this.col = 2;
-    this.row = 5;
+    this.backToStart();
     this.upcomingMove = null;
     this.moveCooldown = 0;
     this.moveCooldownTime = 0.25;
@@ -140,7 +139,7 @@ APlayer.prototype.update = function(dt) {
     }
     
     if (this.row == 0) {
-        this.die();
+        this.backToStart();
     }
     
     this.x = this.col * colWidth;
@@ -170,9 +169,13 @@ APlayer.prototype.changeCharacter = function() {
     this.sprite = this.characters[this.currentCharacter];
 }
 
-APlayer.prototype.die = function() {
+APlayer.prototype.backToStart = function() {
     this.col = 2;
     this.row = 5;
+}
+
+APlayer.prototype.die = function() {
+    this.backToStart();
 }
 
 
