@@ -28,7 +28,7 @@ AGameState.prototype.resetEnemies = function() {
 AGameState.prototype.nextLevel = function() {
     this.level++;
     
-    if (this.level % 20 == 0) {
+    if (allEnemies.length <= 6 && this.level % 20 == 0) {
         allEnemies.push(new Enemy());
     }
     
