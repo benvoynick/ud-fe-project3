@@ -34,6 +34,11 @@ var APlayer = function() {
     Mortal.call(this);
     
     this.sprite = 'images/char-boy.png';
+    
+    this.xOffset = 35;
+    
+    this.col = 2;
+    this.row = 5;
 }
 APlayer.prototype = Object.create(Mortal.prototype);
 APlayer.prototype.constructor = APlayer;
@@ -42,6 +47,9 @@ APlayer.prototype.constructor = APlayer;
 // Parameter: dt, a time delta between ticks
 APlayer.prototype.update = function(dt) {
     
+    
+    this.x = this.col * colWidth;
+    this.y = this.row * rowHeight - this.xOffset;
 }
 
 // Receive key input from event listener
