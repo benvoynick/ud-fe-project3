@@ -95,7 +95,15 @@ var APlayer = function() {
     
     this.yOffset = 35; // How much to offset y position when drawing sprite on tile
     
-    this.sprite = 'images/char-boy.png';
+    this.characters = [
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+    ];
+    this.currentCharacter = -1;
+    this.changeCharacter();
     
     this.col = 2;
     this.row = 5;
@@ -141,12 +149,25 @@ APlayer.prototype.update = function(dt) {
 
 // Receive key input from event listener
 APlayer.prototype.handleInput = function(keyPressed) {
+    this.upcomingMove = null;
+    
     if(keyPressed !== undefined) {
-        this.upcomingMove = keyPressed;
+        if (keyPressed == 'up' || keyPressed == 'down' || keyPressed == 'left' || keyPressed == 'right') {
+            this.upcomingMove = keyPressed;
+        }
+        else if(keyPressed == 'c') {
+            // If player is still in grass, change character sprite
+            if (this.row > 3) {
+                this.changeCharacter();
+            }
+        }
     }
-    else {
-        this.upcomingMove = null;
-    }
+}
+
+APlayer.prototype.changeCharacter = function() {
+    this.currentCharacter++;
+    if (this.currentCharacter > this.characters.length - 1) this.currentCharacter = 0;
+    this.sprite = this.characters[this.currentCharacter];
 }
 
 APlayer.prototype.die = function() {
@@ -169,7 +190,8 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        67: 'c'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
