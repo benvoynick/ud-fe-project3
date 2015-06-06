@@ -33,7 +33,21 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.x + (this.speed * dt);
+    var distanceTraveled = this.speed * dt;
+    
+    // Don't let enemies overlap/overtake one another
+    for (e = 0; e < allEnemies.length; e++) {
+        if(allEnemies[e] !== this && allEnemies[e].row == this.row && allEnemies[e].x > this.x){
+            var distanceApart = Math.abs(allEnemies[e].x - this.x) - colWidth;
+            
+            if (distanceTraveled > distanceApart){
+                if (distanceApart > 0) distanceTraveled = distanceApart;
+                else distanceTraveled = 0;
+            }
+        }
+    }
+    
+    this.x += distanceTraveled;
     
     // Update current column if necessary
     if (this.x - this.col * colWidth > colWidth / 2) {
