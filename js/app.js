@@ -190,6 +190,12 @@ APlayer.prototype.backToStart = function() {
 }
 
 APlayer.prototype.die = function() {
+    if (this.health > 1) {
+        this.health--;
+    }
+    else {
+        this.health = this.maxHealth;
+    }
     this.backToStart();
 }
 
