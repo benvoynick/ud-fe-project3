@@ -20,8 +20,9 @@ Enemy.prototype = Object.create(Mortal.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.spawn = function() {
+    this.velocity = Resources.getRandomInt(100, 150);
     this.row = Resources.getRandomInt(1, 3);
-    this.col = 0;
+    this.col = -1;
     this.y = this.row * rowHeight - this.yOffset;
     this.x = this.col * colWidth;
     console.log('Spawned an enemy on row ' + this.row);
@@ -33,7 +34,15 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.x + 1 * dt;
+    this.x = this.x + (this.velocity * dt);
+    
+    if (this.x - this.col * colWidth > colWidth / 2) {
+        this.col += 1;
+    }
+    
+    if (this.col > 5) {
+        this.spawn();
+    }
 }
 
 
