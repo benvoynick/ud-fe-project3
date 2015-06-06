@@ -41,7 +41,7 @@ AGameState.prototype.nextLevel = function() {
     
     this.stage.updateForLevel(this.level);
     
-    if (allEnemies.length <= this.stage.numCols + 1 && this.level % 15 == 0) {
+    if (allEnemies.length <= this.stage.numCols + 1 && (this.level - 1) % 15 == 0) {
         allEnemies.push(new Enemy());
     }
     
@@ -96,7 +96,7 @@ AStage.prototype.updateForLevel = function(level) {
             null
         ]
     }
-    else if (level <= 20) {
+    else if (level <= 10) {
         this.rowTypes = [
             'water',
             'stone',
@@ -111,6 +111,82 @@ AStage.prototype.updateForLevel = function(level) {
             'left',
             'right',
             'right',
+            null,
+            null
+        ]
+    }
+    else if (level <= 15) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'left',
+            'left',
+            'right',
+            null,
+            null
+        ]
+    }
+    else if (level <= 20) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'right',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    }
+    else if (level <= 25) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'right',
+            'left',
+            'left',
+            null,
+            null
+        ]
+    }
+    else if (level <= 30) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'right',
+            'right',
+            'left',
             null,
             null
         ]
@@ -127,14 +203,33 @@ AStage.prototype.updateForLevel = function(level) {
         
         this.rowEnemyDirection = [
             null,
-            'right',
-            'right',
+            'left',
+            'left',
             'left',
             null,
             null
         ]
     }
     else if (level <= 40) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'left',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    }
+    else if (level <= 45) {
         this.rowTypes = [
             'water',
             'stone',
