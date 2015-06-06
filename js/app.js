@@ -30,20 +30,20 @@ Enemy.prototype.update = function(dt) {
 
 
 // The player
-var player = function() {
+var APlayer = function() {
     Mortal.call(this);
 }
-player.prototype = Object.create(Mortal.prototype);
-player.prototype.constructor = player;
+APlayer.prototype = Object.create(Mortal.prototype);
+APlayer.prototype.constructor = APlayer;
 
 // Update the player's position
 // Parameter: dt, a time delta between ticks
-player.prototype.update = function(dt) {
+APlayer.prototype.update = function(dt) {
     
 }
 
 // Receive key input from event listener
-player.prototype.handleInput = function(keyPressed) {
+APlayer.prototype.handleInput = function(keyPressed) {
     
 }
 
@@ -51,7 +51,7 @@ player.prototype.handleInput = function(keyPressed) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
+player = new APlayer();
 
 
 // This listens for key presses and sends the keys to your
