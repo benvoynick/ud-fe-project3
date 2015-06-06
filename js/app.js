@@ -18,6 +18,10 @@ AGameState.prototype.nextLevel = function() {
 
 AGameState.prototype.lose = function() {
     this.level = 1;
+    allEnemies = [];
+    for(e = 0; e < 3; e++) {
+        allEnemies[e] = new Enemy();
+    }
 }
 
 
@@ -232,7 +236,8 @@ APlayer.prototype.die = function() {
 // Place the player object in a variable called player
 gameState = new AGameState();
 player = new APlayer();
-allEnemies = [new Enemy, new Enemy, new Enemy];
+allEnemies = [];
+gameState.lose();
 
 
 // This listens for key presses and sends the keys to your
