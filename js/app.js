@@ -105,6 +105,10 @@ APlayer.prototype.update = function(dt) {
         }
     }
     
+    if (this.row == 0) {
+        this.die();
+    }
+    
     this.x = this.col * colWidth;
     this.y = this.row * rowHeight - this.yOffset;
 }
