@@ -30,6 +30,7 @@ AGameState.prototype.nextLevel = function() {
     
     if (this.level == 100) {
         this.win();
+        return;
     }
     
     if (allEnemies.length <= 6 && this.level % 20 == 0) {
@@ -47,14 +48,12 @@ AGameState.prototype.nextLevel = function() {
 
 AGameState.prototype.lose = function() {
     this.level = 1;
-    
     this.resetEnemies();
-    
     this.respawnEnemies();
 }
 
 AGameState.prototype.win = function() {
-    
+    this.lose();
 }
 
 
