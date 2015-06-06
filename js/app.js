@@ -35,12 +35,22 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x = this.x + (this.velocity * dt);
     
+    // Update current column if necessary
     if (this.x - this.col * colWidth > colWidth / 2) {
         this.col += 1;
     }
     
+    this.checkCollision();
+    
     if (this.col > 5) {
         this.spawn();
+    }
+}
+
+Enemy.prototype.checkCollision = function() {
+    // Check for collision with player
+    if (this.row == player.row && this.col == player.col) {
+        player.die();
     }
 }
 
