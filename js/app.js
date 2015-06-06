@@ -34,21 +34,21 @@ AGameState.prototype.resetEnemies = function() {
 AGameState.prototype.nextLevel = function() {
     this.level++;
     
-    if (this.level == 100) {
+    if (this.level > 50) {
         this.win();
         return;
     }
     
     this.stage.updateForLevel(this.level);
     
-    if (allEnemies.length <= this.stage.numCols + 1 && this.level % 20 == 0) {
+    if (allEnemies.length <= this.stage.numCols + 1 && this.level % 15 == 0) {
         allEnemies.push(new Enemy());
     }
     
     for(e = 0; e < 3; e++) {
         allEnemies[e] = new Enemy();
-        allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + (this.level) - 1;
-        allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + (this.level) - 1;
+        allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + (this.level * 2) - 2;
+        allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + (this.level * 2) - 2;
     }
     
     this.respawnEnemies(true);
@@ -153,7 +153,7 @@ AStage.prototype.updateForLevel = function(level) {
             null
         ]
     }
-    else if (level <= 45) {
+    else {
         this.rowTypes = [
             'water',
             'stone',
@@ -168,25 +168,6 @@ AStage.prototype.updateForLevel = function(level) {
             'left',
             'right',
             'left',
-            null,
-            null
-        ]
-    }
-    else if (level <= 50) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'right',
-            'left',
-            'right',
             null,
             null
         ]
