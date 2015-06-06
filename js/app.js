@@ -43,6 +43,7 @@ Enemy.prototype.update = function(dt) {
             var distanceApart = Math.abs(allEnemies[e].x - this.x) - colWidth;
             
             if (distanceTraveled > distanceApart){
+                // An enemy behind a slower enemy will boost the speed of the slower enemy
                 if(allEnemies[e].speed < allEnemies[e].maxSpeed) {
                     var boost = 200 * dt;
                     var speedDifference = this.speed - allEnemies[e].speed;
