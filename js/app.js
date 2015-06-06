@@ -39,6 +39,7 @@ var APlayer = function() {
     
     this.col = 2;
     this.row = 5;
+    this.upcomingMove = null;
 }
 APlayer.prototype = Object.create(Mortal.prototype);
 APlayer.prototype.constructor = APlayer;
@@ -46,7 +47,22 @@ APlayer.prototype.constructor = APlayer;
 // Update the player's position
 // Parameter: dt, a time delta between ticks
 APlayer.prototype.update = function(dt) {
-    
+    if (this.upcomingMove !== null) {
+        var newCol = this.col;
+        var newRow = this.row;
+        
+        if (this.upcomingMove == 'up') newRow -= 1;
+        else if (this.upcomingMove == 'down') newRow += 1;
+        else if (this.upcomingMove == 'left') newCol -= 1;
+        else if (this.upcomingMove == 'right') newCol += 1;
+        
+        this.upcomingMove = null;
+        
+        if (newCol < 5 && newRow < 6 && newCol >= 0 && newRow >= 0) {
+            this.col = newCol;
+            this.row = newRow;
+        }
+    }
     
     this.x = this.col * colWidth;
     this.y = this.row * rowHeight - this.xOffset;
@@ -54,7 +70,12 @@ APlayer.prototype.update = function(dt) {
 
 // Receive key input from event listener
 APlayer.prototype.handleInput = function(keyPressed) {
-    
+    if(keyPressed !== undefined) {
+        this.upcomingMove = keyPressed;
+    }
+    else {
+        this.upcomingMove = null;
+    }
 }
 
 
