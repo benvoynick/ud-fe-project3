@@ -28,8 +28,18 @@ AGameState.prototype.resetEnemies = function() {
 AGameState.prototype.nextLevel = function() {
     this.level++;
     
+    if (this.level == 100) {
+        this.win();
+    }
+    
     if (allEnemies.length <= 6 && this.level % 20 == 0) {
         allEnemies.push(new Enemy());
+    }
+    
+    for(e = 0; e < 3; e++) {
+        allEnemies[e] = new Enemy();
+        allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + (this.level) - 1;
+        allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + (this.level) - 1;
     }
     
     this.respawnEnemies();
@@ -41,6 +51,10 @@ AGameState.prototype.lose = function() {
     this.resetEnemies();
     
     this.respawnEnemies();
+}
+
+AGameState.prototype.win = function() {
+    
 }
 
 
@@ -60,9 +74,11 @@ Mortal.prototype.render = function() {
 var Enemy = function() {
     Mortal.call(this);
     
-    this.yOffset = 25; 
-    this.minSpeed = 150;
-    this.maxSpeed = 250;
+    this.yOffset = 25;
+    this.baseMinSpeed = 150;
+    this.baseMaxSpeed = 250;
+    this.minSpeed = this.baseMinSpeed;
+    this.maxSpeed = this.baseMaxSpeed;
     
     this.sprite = 'images/enemy-bug.png';
 }
