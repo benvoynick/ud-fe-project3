@@ -13,6 +13,8 @@ var Enemy = function() {
     Mortal.call(this);
     
     this.yOffset = 25;
+    this.minSpeed = 150;
+    this.maxSpeed = 250;
     
     this.sprite = 'images/enemy-bug.png';
 }
@@ -20,7 +22,7 @@ Enemy.prototype = Object.create(Mortal.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.spawn = function() {
-    this.speed = Resources.getRandomInt(150, 250);
+    this.speed = Resources.getRandomInt(this.minSpeed, this.maxSpeed);
     this.row = Resources.getRandomInt(1, 3);
     this.col = -1;
     this.y = this.row * rowHeight - this.yOffset;
