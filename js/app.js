@@ -32,6 +32,8 @@ Enemy.prototype.update = function(dt) {
 // The player
 var APlayer = function() {
     Mortal.call(this);
+    
+    this.sprite = 'images/char-boy.png';
 }
 APlayer.prototype = Object.create(Mortal.prototype);
 APlayer.prototype.constructor = APlayer;
