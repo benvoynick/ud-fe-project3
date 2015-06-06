@@ -195,6 +195,7 @@ APlayer.prototype.die = function() {
     }
     else {
         this.health = this.maxHealth;
+        this.changeCharacter();
     }
     this.backToStart();
 }
