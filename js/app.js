@@ -11,13 +11,21 @@ Mortal.prototype.render = function() {
 // Enemies our player must avoid
 var Enemy = function() {
     Mortal.call(this);
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    
+    this.yOffset = 25;
+    
     this.sprite = 'images/enemy-bug.png';
 }
 Enemy.prototype = Object.create(Mortal.prototype);
 Enemy.prototype.constructor = Enemy;
+
+Enemy.prototype.spawn = function() {
+    this.row = Resources.getRandomInt(1, 3);
+    this.col = 0;
+    this.y = this.row * rowHeight - this.yOffset;
+    this.x = this.col * colWidth;
+    console.log('Spawned an enemy on row ' + this.row);
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -25,6 +33,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x = this.x + 1 * dt;
 }
 
 
@@ -33,9 +42,9 @@ Enemy.prototype.update = function(dt) {
 var APlayer = function() {
     Mortal.call(this);
     
-    this.sprite = 'images/char-boy.png';
+    this.yOffset = 35;
     
-    this.xOffset = 35;
+    this.sprite = 'images/char-boy.png';
     
     this.col = 2;
     this.row = 5;
@@ -65,7 +74,7 @@ APlayer.prototype.update = function(dt) {
     }
     
     this.x = this.col * colWidth;
-    this.y = this.row * rowHeight - this.xOffset;
+    this.y = this.row * rowHeight - this.yOffset;
 }
 
 // Receive key input from event listener
@@ -88,7 +97,7 @@ APlayer.prototype.die = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 player = new APlayer();
-allEnemies = [];
+allEnemies = [new Enemy, new Enemy, new Enemy];
 
 
 // This listens for key presses and sends the keys to your
