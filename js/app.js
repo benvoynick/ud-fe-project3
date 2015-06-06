@@ -14,9 +14,13 @@ AGameState.prototype.renderLevel = function() {
     ctx.restore();
 }
 
-AGameState.prototype.respawnEnemies = function() {
+AGameState.prototype.respawnEnemies = function(newLevel) {
+    if (newLevel === undefined) {
+        newLevel = false;
+    }
+    
     for(e = 0; e < allEnemies.length; e++) {
-        allEnemies[e].spawn();
+        allEnemies[e].spawn(newLevel);
     }
 }
 
@@ -35,7 +39,7 @@ AGameState.prototype.nextLevel = function() {
         return;
     }
     
-    if (allEnemies.length <= 6 && this.level % 20 == 0) {
+    if (allEnemies.length <= this.stage.numCols && this.level % 20 == 0) {
         allEnemies.push(new Enemy());
     }
     
@@ -45,13 +49,13 @@ AGameState.prototype.nextLevel = function() {
         allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + (this.level) - 1;
     }
     
-    this.respawnEnemies();
+    this.respawnEnemies(true);
 }
 
 AGameState.prototype.lose = function() {
     this.level = 1;
     this.resetEnemies();
-    this.respawnEnemies();
+    this.respawnEnemies(true);
 }
 
 AGameState.prototype.win = function() {
@@ -139,10 +143,27 @@ var Enemy = function() {
 Enemy.prototype = Object.create(Mortal.prototype);
 Enemy.prototype.constructor = Enemy;
 
-Enemy.prototype.spawn = function() {
+Enemy.prototype.spawn = function(newLevel) {
+    if (newLevel === undefined) {
+        newLevel = false;
+    }
+    
     this.speed = Resources.getRandomInt(this.minSpeed, this.maxSpeed);
     this.row = Resources.getRandomInt(gameState.stage.firstStoneRow, gameState.stage.lastStoneRow);
-    this.col = -1;
+    if(newLevel) {
+        this.col = null;
+        while (this.col === null) {
+            possCol = Resources.getRandomInt(-1, gameState.stage.numCols);
+            for(var e = 0; e < allEnemies.length; e++) {
+                if (allEnemies[e] !== this && allEnemies[e].col == possCol) {
+                    possCol = null;
+                    break;
+                }
+            }
+            this.col = possCol;
+        }
+    }
+    else this.col = -1;
     this.y = this.row * rowHeight;
     this.x = this.col * colWidth;
 }
