@@ -1,9 +1,10 @@
 var Mortal = function() {
+    this.yOffset = 0; // How much to offset y position when drawing sprite on tile
+    
     this.sprite = 'images/Gem Green.png';   // Fallback image, should not be used in real game
 }
-// Draw the enemy on the screen, required method for game
 Mortal.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y - this.yOffset);
 }
 
 
@@ -12,7 +13,7 @@ Mortal.prototype.render = function() {
 var Enemy = function() {
     Mortal.call(this);
     
-    this.yOffset = 25;
+    this.yOffset = 25; 
     this.minSpeed = 150;
     this.maxSpeed = 250;
     
@@ -25,7 +26,7 @@ Enemy.prototype.spawn = function() {
     this.speed = Resources.getRandomInt(this.minSpeed, this.maxSpeed);
     this.row = Resources.getRandomInt(1, 3);
     this.col = -1;
-    this.y = this.row * rowHeight - this.yOffset;
+    this.y = this.row * rowHeight;
     this.x = this.col * colWidth;
 }
 
@@ -92,7 +93,7 @@ Enemy.prototype.speedBoost = function(boost) {
 var APlayer = function() {
     Mortal.call(this);
     
-    this.yOffset = 35;
+    this.yOffset = 35; // How much to offset y position when drawing sprite on tile
     
     this.sprite = 'images/char-boy.png';
     
@@ -135,7 +136,7 @@ APlayer.prototype.update = function(dt) {
     }
     
     this.x = this.col * colWidth;
-    this.y = this.row * rowHeight - this.yOffset;
+    this.y = this.row * rowHeight;
 }
 
 // Receive key input from event listener
