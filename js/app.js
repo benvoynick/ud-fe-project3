@@ -1,3 +1,23 @@
+var AGameState = function() {
+    this.level = 1;
+}
+
+AGameState.prototype.renderLevel = function() {
+    ctx.save();
+    ctx.font = "36px Helvetica";
+	ctx.textAlign = "left";
+	ctx.textBaseline = "top";
+    ctx.fillStyle = 'black';
+    ctx.fillText('Level ' + this.level, 5, 0);
+    ctx.restore();
+}
+
+AGameState.prototype.nextLevel = function() {
+    this.level++;
+}
+
+
+
 var Mortal = function() {
     this.yOffset = 0; // How much to offset y position when drawing sprite on tile
     
@@ -154,6 +174,7 @@ APlayer.prototype.update = function(dt) {
     }
     
     if (this.row == 0) {
+        gameState.nextLevel();
         this.backToStart();
     }
     
@@ -204,6 +225,7 @@ APlayer.prototype.die = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+gameState = new AGameState();
 player = new APlayer();
 allEnemies = [new Enemy, new Enemy, new Enemy];
 
