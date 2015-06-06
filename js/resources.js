@@ -98,6 +98,14 @@
     function onReady(func) {
         readyCallbacks.push(func);
     }
+    
+    /*
+     * This function returns a random integer
+     * From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+     */
+    function getRandomInt(min, max) {
+        Math.floor(Math.random() * (max - min)) + min;
+    }
 
     /* This object defines the publicly accessible functions available to
      * developers by creating a global Resources object.
@@ -106,6 +114,7 @@
         load: load,
         get: get,
         onReady: onReady,
-        isReady: isReady
+        isReady: isReady,
+        getRandomInt: getRandomInt
     };
 })();
