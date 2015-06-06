@@ -78,6 +78,11 @@ APlayer.prototype.handleInput = function(keyPressed) {
     }
 }
 
+APlayer.prototype.die = function() {
+    this.col = 2;
+    this.row = 5;
+}
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
