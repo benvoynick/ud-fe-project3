@@ -99,6 +99,8 @@ var APlayer = function() {
     this.col = 2;
     this.row = 5;
     this.upcomingMove = null;
+    this.moveCooldown = 0;
+    this.moveCooldownTime = 0.25;
 }
 APlayer.prototype = Object.create(Mortal.prototype);
 APlayer.prototype.constructor = APlayer;
@@ -106,7 +108,11 @@ APlayer.prototype.constructor = APlayer;
 // Update the player's position
 // Parameter: dt, a time delta between ticks
 APlayer.prototype.update = function(dt) {
-    if (this.upcomingMove !== null) {
+    if (this.moveCooldown > 0) {
+        this.moveCooldown -= dt;
+    }
+    
+    if (this.upcomingMove !== null && this.moveCooldown <= 0) {
         var newCol = this.col;
         var newRow = this.row;
         
@@ -120,6 +126,7 @@ APlayer.prototype.update = function(dt) {
         if (newCol < 5 && newRow < 6 && newCol >= 0 && newRow >= 0) {
             this.col = newCol;
             this.row = newRow;
+            this.moveCooldown = this.moveCooldownTime;
         }
     }
     
