@@ -61,10 +61,25 @@ AGameState.prototype.win = function() {
 
 
 var AStage = function() {
+    this.numRows = 6;
+    this.numCols = 5;
     
+    this.rowTypes = [
+        'water',
+        'stone',
+        'stone',
+        'stone',
+        'grass',
+        'grass'
+    ]
+    
+    // Data for enemy spawns
+    this.firstStoneRow = 1;
+    this.lastStoneRow = 3;
 }
 
 AStage.prototype.render = function() {
+    // Blank canvas to ensure there are no artifacts from previous frame
     ctx.save();
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -73,24 +88,18 @@ AStage.prototype.render = function() {
     /* This array holds the relative URL to the image used
      * for that particular row of the game level.
      */
-    var rowImages = [
-            'images/water-block.png',   // Top row is water
-            'images/stone-block.png',   // Row 1 of 3 of stone
-            'images/stone-block.png',   // Row 2 of 3 of stone
-            'images/stone-block.png',   // Row 3 of 3 of stone
-            'images/grass-block.png',   // Row 1 of 2 of grass
-            'images/grass-block.png'    // Row 2 of 2 of grass
-        ],
-        numRows = 6,
-        numCols = 5,
-        row, col;
+    var row, col;
 
     /* Loop through the number of rows and columns we've defined above
      * and, using the rowImages array, draw the correct image for that
      * portion of the "grid"
      */
-    for (row = 0; row < numRows; row++) {
-        for (col = 0; col < numCols; col++) {
+    for (row = 0; row < this.numRows; row++) {
+        var rowType = this.rowTypes[row];
+        if (rowType == 'water') cellSprite = 'images/water-block.png';
+        else if (rowType == 'stone') cellSprite = 'images/stone-block.png';
+        else if (rowType == 'grass') cellSprite = 'images/grass-block.png';
+        for (col = 0; col < this.numCols; col++) {
             /* The drawImage function of the canvas' context element
              * requires 3 parameters: the image to draw, the x coordinate
              * to start drawing and the y coordinate to start drawing.
@@ -98,7 +107,7 @@ AStage.prototype.render = function() {
              * so that we get the benefits of caching these images, since
              * we're using them over and over.
              */
-            ctx.drawImage(Resources.get(rowImages[row]), col * colWidth, row * rowHeight);
+            ctx.drawImage(Resources.get(cellSprite), col * colWidth, row * rowHeight);
         }
     }
 }
@@ -132,7 +141,7 @@ Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.spawn = function() {
     this.speed = Resources.getRandomInt(this.minSpeed, this.maxSpeed);
-    this.row = Resources.getRandomInt(1, 3);
+    this.row = Resources.getRandomInt(gameState.stage.firstStoneRow, gameState.stage.lastStoneRow);
     this.col = -1;
     this.y = this.row * rowHeight;
     this.x = this.col * colWidth;
@@ -280,7 +289,7 @@ APlayer.prototype.handleInput = function(keyPressed) {
         }
         else if(keyPressed == 'c') {
             // If player is still in grass, change character sprite
-            if (this.row > 3) {
+            if (gameState.stage.rowTypes[this.row] != 'stone') {
                 this.changeCharacter();
             }
         }
