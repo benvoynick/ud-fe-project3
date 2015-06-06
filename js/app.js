@@ -39,7 +39,9 @@ AGameState.prototype.nextLevel = function() {
         return;
     }
     
-    if (allEnemies.length <= this.stage.numCols && this.level % 20 == 0) {
+    this.stage.updateForLevel(this.level);
+    
+    if (allEnemies.length <= this.stage.numCols + 1 && this.level % 20 == 0) {
         allEnemies.push(new Enemy());
     }
     
@@ -54,6 +56,7 @@ AGameState.prototype.nextLevel = function() {
 
 AGameState.prototype.lose = function() {
     this.level = 1;
+    this.stage.updateForLevel(this.level);
     this.resetEnemies();
     this.respawnEnemies(true);
 }
@@ -68,18 +71,126 @@ var AStage = function() {
     this.numRows = 6;
     this.numCols = 5;
     
-    this.rowTypes = [
-        'water',
-        'stone',
-        'stone',
-        'stone',
-        'grass',
-        'grass'
-    ]
-    
     // Data for enemy spawns
     this.firstStoneRow = 1;
     this.lastStoneRow = 3;
+}
+
+AStage.prototype.updateForLevel = function(level) {
+    if (level <= 5) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'right',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    }
+    else if (level <= 20) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'left',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    }
+    else if (level <= 35) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'right',
+            'right',
+            'left',
+            null,
+            null
+        ]
+    }
+    else if (level <= 40) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'right',
+            'left',
+            'right',
+            null,
+            null
+        ]
+    }
+    else if (level <= 45) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'left',
+            'right',
+            'left',
+            null,
+            null
+        ]
+    }
+    else if (level <= 50) {
+        this.rowTypes = [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ]
+        
+        this.rowEnemyDirection = [
+            null,
+            'right',
+            'left',
+            'right',
+            null,
+            null
+        ]
+    }
 }
 
 AStage.prototype.render = function() {
@@ -121,9 +232,19 @@ var Mortal = function() {
     this.yOffset = 0; // How much to offset y position when drawing sprite on tile
     
     this.sprite = 'images/Gem Green.png';   // Fallback image, should not be used in real game
+    this.spriteFlipped = false;
 }
 Mortal.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y - this.yOffset);
+    ctx.save();
+    if (this.spriteFlipped) {
+        ctx.scale(-1, 1);
+        posX = this.x * -1 - colWidth;
+    }
+    else {
+        posX = this.x;
+    }
+    ctx.drawImage(Resources.get(this.sprite), posX, this.y - this.yOffset);
+    ctx.restore();
 }
 
 
@@ -163,7 +284,17 @@ Enemy.prototype.spawn = function(newLevel) {
             this.col = possCol;
         }
     }
-    else this.col = -1;
+    else {
+        if (gameState.stage.rowEnemyDirection[this.row] == 'right') this.col = -1;
+        else if(gameState.stage.rowEnemyDirection[this.row] == 'left') this.col = gameState.stage.numCols + 1;
+        else {
+            console.log('Error: invalid enemy spawn row ' + this.row);
+        }
+    }
+    
+    if (gameState.stage.rowEnemyDirection[this.row] == 'right') this.spriteFlipped = false;
+    else if (gameState.stage.rowEnemyDirection[this.row] == 'left') this.spriteFlipped = true;
+    
     this.y = this.row * rowHeight;
     this.x = this.col * colWidth;
 }
@@ -176,9 +307,13 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     var distanceTraveled = Math.round(this.speed) * dt;
     
+    var enemyDirection = gameState.stage.rowEnemyDirection[this.row];
+    
     // Don't let enemies overlap/overtake one another
     for (e = 0; e < allEnemies.length; e++) {
-        if(allEnemies[e] !== this && allEnemies[e].row == this.row && allEnemies[e].x > this.x){
+        if(allEnemies[e] !== this && allEnemies[e].row == this.row &&
+           ( (enemyDirection == 'right' && allEnemies[e].x > this.x) ||
+           (enemyDirection == 'left' && allEnemies[e].x < this.x) ) ){
             var distanceApart = Math.abs(allEnemies[e].x - this.x) - colWidth;
             
             if (distanceTraveled > distanceApart){
@@ -197,16 +332,20 @@ Enemy.prototype.update = function(dt) {
         }
     }
     
-    this.x += distanceTraveled;
+    if(enemyDirection == 'right') this.x += distanceTraveled;
+    else if(enemyDirection == 'left') this.x -= distanceTraveled;
     
     // Update current column if necessary
-    if (this.x - this.col * colWidth > colWidth / 2) {
+    if (enemyDirection == 'right' && this.x - this.col * colWidth > colWidth / 2) {
         this.col += 1;
+    }
+    else if (enemyDirection == 'left' && this.col * colWidth - this.x > colWidth / 2) {
+        this.col -= 1;
     }
     
     this.checkCollision();
     
-    if (this.col > 5) {
+    if (this.col > 6 || this.col < -1) {
         this.spawn();
     }
 }
