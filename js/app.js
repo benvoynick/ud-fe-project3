@@ -35,7 +35,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    var distanceTraveled = this.speed * dt;
+    var distanceTraveled = Math.round(this.speed) * dt;
     
     // Don't let enemies overlap/overtake one another
     for (e = 0; e < allEnemies.length; e++) {
@@ -43,6 +43,14 @@ Enemy.prototype.update = function(dt) {
             var distanceApart = Math.abs(allEnemies[e].x - this.x) - colWidth;
             
             if (distanceTraveled > distanceApart){
+                if(allEnemies[e].speed < allEnemies[e].maxSpeed) {
+                    var boost = 200 * dt;
+                    var speedDifference = this.speed - allEnemies[e].speed;
+                    
+                    if (boost > speedDifference) boost = speedDifference;
+                    allEnemies[e].speedBoost(boost);
+                }
+                
                 if (distanceApart > 0) distanceTraveled = distanceApart;
                 else distanceTraveled = 0;
             }
@@ -67,6 +75,13 @@ Enemy.prototype.checkCollision = function() {
     // Check for collision with player
     if (this.row == player.row && this.col == player.col) {
         player.die();
+    }
+}
+
+Enemy.prototype.speedBoost = function(boost) {
+    if (this.speed < this.maxSpeed) {
+        if (this.speed + boost > this.maxSpeed) this.speed = this.maxSpeed;
+        else this.speed += boost;
     }
 }
 
