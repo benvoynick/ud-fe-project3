@@ -25,7 +25,6 @@ Enemy.prototype.spawn = function() {
     this.col = -1;
     this.y = this.row * rowHeight - this.yOffset;
     this.x = this.col * colWidth;
-    console.log('Spawned an enemy on row ' + this.row);
 }
 
 // Update the enemy's position, required method for game
