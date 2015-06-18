@@ -1,5 +1,6 @@
 var AGameState = function() {
     this.level = 1;
+    this.startingEnemyCount = 3;
     
     this.stage = new AStage();
 }
@@ -26,7 +27,7 @@ AGameState.prototype.respawnEnemies = function(newLevel) {
 
 AGameState.prototype.resetEnemies = function() {
     allEnemies = [];
-    for(e = 0; e < 3; e++) {
+    for(e = 0; e < this.startingEnemyCount; e++) {
         allEnemies[e] = new Enemy();
     }
 }
@@ -45,8 +46,8 @@ AGameState.prototype.nextLevel = function() {
         allEnemies.push(new Enemy());
     }
     
-    for(e = 0; e < 3; e++) {
-        allEnemies[e] = new Enemy();
+    for(e = 0; e < allEnemies.length; e++) {
+        //allEnemies[e] = new Enemy();
         allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + (this.level * 2) - 2;
         allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + (this.level * 2) - 2;
     }
