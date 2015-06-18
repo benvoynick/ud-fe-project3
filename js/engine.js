@@ -126,7 +126,7 @@ var Engine = (function(global) {
 
         player.renderPlayerElements();
         
-        gameState.renderLevel();
+        gameState.renderLevelText();
     }
 
     /* This function does nothing but it could have been a good place to

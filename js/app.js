@@ -4,7 +4,7 @@ var AGameState = function() {
     this.stage = new AStage();
 }
 
-AGameState.prototype.renderLevel = function() {
+AGameState.prototype.renderLevelText = function() {
     ctx.save();
     ctx.font = "36px Helvetica";
 	ctx.textAlign = "left";
