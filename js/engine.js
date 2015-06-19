@@ -85,7 +85,7 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
-        // Blank canvas to ensure there are no artifacts from previous frame
+        // Blank the canvas to ensure there are no artifacts from previous frame
         ctx.save();
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);

@@ -9,6 +9,7 @@ var AGameState = function() {
     
     this.currentTextMessage = null;
     this.currentTextMessageTimeLeft = 0;
+    this.currentTextMessagePriority = 0;
     this.currentTextMessageColor = 'black';
     
     this.stage = new AStage();
@@ -68,6 +69,7 @@ AGameState.prototype.updateText = function(dt) {
     if (this.currentTextMessageTimeLeft <= 0) {
         this.currentTextMessageTimeLeft = 0;
         this.currentTextMessage = null;
+        this.currentTextMessagePriority = 0;
         this.currentTextMessageColor = 'black';
     }
 }
@@ -84,6 +86,7 @@ AGameState.prototype.nextLevel = function() {
     
     if (allEnemies.length <= this.stage.numCols + 1 && (this.level - 1) % 15 == 0) {
         allEnemies.push(new Enemy());
+        gameState.showTextMessage('+1 Enemy!', 1, 5, 'red');
     }
     
     for(e = 0; e < allEnemies.length; e++) {
@@ -107,18 +110,29 @@ AGameState.prototype.reset = function() {
     player.reset();
 }
 
-AGameState.prototype.showTextMessage = function(text, secondsToDisplay, color) {
-    this.currentTextMessage = text;
-    this.currentTextMessageTimeLeft = secondsToDisplay;
-    if (color !== undefined) this.currentTextMessageColor = color;
-    else this.currentTextMessageColor = 'black';
+AGameState.prototype.showTextMessage = function(text, secondsToDisplay, priority, color) {
+    if (priority === undefined) priority = 0;
+    
+    if (this.currentTextMessage === null ||
+        this.currentTextMessageTimeLeft <= 0 ||
+        priority > this.currentTextMessagePriority) {
+        this.currentTextMessage = text;
+        this.currentTextMessageTimeLeft = secondsToDisplay;
+        this.currentTextMessagePriority = priority;
+        if (color !== undefined) this.currentTextMessageColor = color;
+        else this.currentTextMessageColor = 'black';
+    }
+    
 }
 
 AGameState.prototype.lose = function() {
     this.reset();
+    
+    this.showTextMessage('You Lost', 2.5, 10, 'red');
 }
 
 AGameState.prototype.win = function() {
+    gameState.showTextMessage('YOU WIN!', 5, 10, '#060');
     this.reset();
 }
 
@@ -594,6 +608,8 @@ APlayer.prototype.update = function(dt) {
         // The player made it across!
         gameState.nextLevel();
         this.backToStart();
+        
+        gameState.showTextMessage('Safe!', 1, 0, 'blue');
     }
     
     this.x = this.col * colWidth;
@@ -633,6 +649,8 @@ APlayer.prototype.reset = function() {
 APlayer.prototype.die = function() {
     if (this.health > 1) {
         this.health--;
+        
+        gameState.showTextMessage('Ouch!', 1.5, 0, 'red');
     }
     else {
         gameState.lose();
