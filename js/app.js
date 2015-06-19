@@ -44,14 +44,14 @@ AGameState.prototype.respawnEnemies = function(newLevel) {
         newLevel = false;
     }
     
-    for(e = 0; e < allEnemies.length; e++) {
+    for(var e = 0; e < allEnemies.length; e++) {
         allEnemies[e].spawn(newLevel);
     }
 }
 
 AGameState.prototype.resetEnemies = function() {
     allEnemies = [];
-    for(e = 0; e < this.startingEnemyCount; e++) {
+    for(var e = 0; e < this.startingEnemyCount; e++) {
         allEnemies[e] = new Enemy();
     }
 }
@@ -89,7 +89,7 @@ AGameState.prototype.nextLevel = function() {
         gameState.showTextMessage('+1 Enemy!', 1, 5, 'red');
     }
     
-    for(e = 0; e < allEnemies.length; e++) {
+    for(var e = 0; e < allEnemies.length; e++) {
         // Increase the allowed range of enemy speeds up by 2 per level after level 1
         allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + ( (this.level - 1) * 2);
         allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + ( (this.level - 1) * 2);
@@ -476,7 +476,7 @@ Enemy.prototype.update = function(dt) {
     var enemyDirection = gameState.stage.rowEnemyDirection[this.row];
     
     // Don't let this enemy overlap/overtake other enemies
-    for (e = 0; e < allEnemies.length; e++) {
+    for (var e = 0; e < allEnemies.length; e++) {
         if (allEnemies[e] !== this && allEnemies[e].row == this.row &&
            ( (enemyDirection == 'right' && allEnemies[e].x > this.x) ||
            (enemyDirection == 'left' && allEnemies[e].x < this.x) ) ) {
@@ -574,7 +574,7 @@ APlayer.prototype.renderPlayerElements = function() {
  * Display hearts at the top right of the canvas to show remaining player health
  */
 APlayer.prototype.renderHealth = function() {
-    for(h = 1; h <= this.health; h++) {
+    for(var h = 1; h <= this.health; h++) {
         ctx.drawImage(Resources.get('images/Heart.png'), canvas.width - (22 * h), 0, 20, 34);
     }
 }
