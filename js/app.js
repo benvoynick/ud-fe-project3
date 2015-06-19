@@ -666,7 +666,6 @@ APlayer.prototype.die = function() {
 var allEnemies = [];
 gameState = new AGameState();
 player = new APlayer();
-gameState.resetEnemies();
 
 
 // This listens for key presses and sends the keys to your
