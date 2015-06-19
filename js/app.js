@@ -664,8 +664,8 @@ APlayer.prototype.die = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-gameState = new AGameState();
-player = new APlayer();
+var gameState = new AGameState();
+var player = new APlayer();
 
 
 // This listens for key presses and sends the keys to your
