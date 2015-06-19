@@ -82,6 +82,9 @@ AGameState.prototype.win = function() {
 
 
 
+/*
+ * Stores information and rendering code for levels
+ */
 var AStage = function() {
     this.numRows = 6;
     this.numCols = 5;
@@ -285,12 +288,6 @@ AStage.prototype.updateForLevel = function(level) {
 }
 
 AStage.prototype.render = function() {
-    // Blank canvas to ensure there are no artifacts from previous frame
-    ctx.save();
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-    
     /* This array holds the relative URL to the image used
      * for that particular row of the game level.
      */
