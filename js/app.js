@@ -7,6 +7,10 @@ var AGameState = function() {
     this.level = 1;
     this.startingEnemyCount = 3;
     
+    this.currentTextMessage = null;
+    this.currentTextMessageTimeLeft = 0;
+    this.currentTextMessageColor = 'black';
+    
     this.stage = new AStage();
 }
 
@@ -18,6 +22,20 @@ AGameState.prototype.renderLevelText = function() {
     ctx.fillStyle = 'black';
     ctx.fillText('Level ' + this.level, 5, 0);
     ctx.restore();
+}
+
+AGameState.prototype.renderMessageText = function() {
+    if (this.currentTextMessageTimeLeft > 0 && this.currentTextMessage !== null) {
+        ctx.save();
+        ctx.font = "40px Helvetica";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.strokeStyle = 'black';
+        ctx.fillStyle = this.currentTextMessageColor;
+        ctx.fillText(this.currentTextMessage, canvas.width / 2, 0);
+        ctx.strokeText(this.currentTextMessage, canvas.width / 2, 0);
+        ctx.restore();
+    }
 }
 
 AGameState.prototype.respawnEnemies = function(newLevel) {
@@ -34,6 +52,15 @@ AGameState.prototype.resetEnemies = function() {
     allEnemies = [];
     for(e = 0; e < this.startingEnemyCount; e++) {
         allEnemies[e] = new Enemy();
+    }
+}
+
+AGameState.prototype.update = function(dt) {
+    this.currentTextMessageTimeLeft -= dt;
+    if (this.currentTextMessageTimeLeft <= 0) {
+        this.currentTextMessageTimeLeft = 0;
+        this.currentTextMessage = null;
+        this.currentTextMessageColor = 'black';
     }
 }
 
@@ -70,6 +97,13 @@ AGameState.prototype.reset = function() {
     this.resetEnemies();
     this.respawnEnemies(true);
     player.reset();
+}
+
+AGameState.prototype.showTextMessage = function(text, secondsToDisplay, color) {
+    this.currentTextMessage = text;
+    this.currentTextMessageTimeLeft = secondsToDisplay;
+    if (color !== undefined) this.currentTextMessageColor = color;
+    else this.currentTextMessageColor = 'black';
 }
 
 AGameState.prototype.lose = function() {
