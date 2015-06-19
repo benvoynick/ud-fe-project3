@@ -112,27 +112,15 @@ var Engine = (function(global) {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
         
-        gameState.stage.render();
+        gameState.renderLevelText();
         
-        renderEntities();
-    }
-
-    /* This function is called by the render function and is called on each game
-     * tick. It's purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
-    function renderEntities() {
-        /* Loop through all of the objects within the allEnemies array and call
-         * the render function you have defined.
-         */
+        gameState.stage.render();
         
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
-        player.renderPlayerElements();
         
-        gameState.renderLevelText();
+        player.renderPlayerElements();
     }
 
     /* This function does nothing but it could have been a good place to
