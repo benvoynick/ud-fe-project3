@@ -115,7 +115,7 @@ AGameState.prototype.showTextMessage = function(text, secondsToDisplay, priority
     
     if (this.currentTextMessage === null ||
         this.currentTextMessageTimeLeft <= 0 ||
-        priority > this.currentTextMessagePriority) {
+        priority >= this.currentTextMessagePriority) {
         this.currentTextMessage = text;
         this.currentTextMessageTimeLeft = secondsToDisplay;
         this.currentTextMessagePriority = priority;
