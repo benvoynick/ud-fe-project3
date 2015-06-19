@@ -17,9 +17,9 @@ var AGameState = function() {
 
 AGameState.prototype.renderLevelText = function() {
     ctx.save();
-    ctx.font = "36px Helvetica";
-	ctx.textAlign = "left";
-	ctx.textBaseline = "top";
+    ctx.font = '36px Helvetica';
+	ctx.textAlign = 'left';
+	ctx.textBaseline = 'top';
     ctx.fillStyle = 'black';
     ctx.fillText('Level ' + this.level, 5, 0);
     ctx.restore();
@@ -28,9 +28,9 @@ AGameState.prototype.renderLevelText = function() {
 AGameState.prototype.renderMessageText = function() {
     if (this.currentTextMessageTimeLeft > 0 && this.currentTextMessage !== null) {
         ctx.save();
-        ctx.font = "40px Helvetica";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
+        ctx.font = '40px Helvetica';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
         ctx.strokeStyle = 'black';
         ctx.fillStyle = this.currentTextMessageColor;
         ctx.fillText(this.currentTextMessage, canvas.width / 2, 0);
@@ -44,14 +44,14 @@ AGameState.prototype.respawnEnemies = function(newLevel) {
         newLevel = false;
     }
     
-    for(var e = 0; e < allEnemies.length; e++) {
+    for (var e = 0; e < allEnemies.length; e++) {
         allEnemies[e].spawn(newLevel);
     }
 };
 
 AGameState.prototype.resetEnemies = function() {
     allEnemies = [];
-    for(var e = 0; e < this.startingEnemyCount; e++) {
+    for (var e = 0; e < this.startingEnemyCount; e++) {
         allEnemies[e] = new Enemy();
     }
 };
@@ -89,7 +89,7 @@ AGameState.prototype.nextLevel = function() {
         gameState.showTextMessage('+1 Enemy!', 1, 5, 'red');
     }
     
-    for(var e = 0; e < allEnemies.length; e++) {
+    for (var e = 0; e < allEnemies.length; e++) {
         // Increase the allowed range of enemy speeds up by 2 per level after level 1
         allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + ( (this.level - 1) * 2);
         allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + ( (this.level - 1) * 2);
@@ -157,7 +157,7 @@ AStage.prototype.updateForLevel = function(level) {
     levelNumForData = level;
     
     // Level data is allowed to be sparse - that is, there does not need to be an entry for every level.
-    // If there isn't data for this specific level, go back and use the most recent level layout preceding this one
+    // If there isn't data for the current level, go back and use the most recent level layout preceding this one
     while (!(levelNumForData in this.levelData) && levelNumForData > 1) {
         levelNumForData--;
     }
@@ -432,7 +432,7 @@ Enemy.prototype.spawn = function(newLevel) {
     }
     
     this.speed = Resources.getRandomInt(this.minSpeed, this.maxSpeed);
-    if(newLevel) {
+    if (newLevel) {
         this.col = null;
         while (this.col === null) {
             this.row = Resources.getRandomInt(gameState.stage.firstStoneRow, gameState.stage.lastStoneRow);
@@ -453,10 +453,8 @@ Enemy.prototype.spawn = function(newLevel) {
         this.row = Resources.getRandomInt(gameState.stage.firstStoneRow, gameState.stage.lastStoneRow);
         
         if (gameState.stage.rowEnemyDirection[this.row] == 'right') this.col = -1;
-        else if(gameState.stage.rowEnemyDirection[this.row] == 'left') this.col = gameState.stage.numCols + 1;
-        else {
-            console.log('Error: invalid enemy spawn row ' + this.row);
-        }
+        else if (gameState.stage.rowEnemyDirection[this.row] == 'left') this.col = gameState.stage.numCols + 1;
+        else console.log('Error: invalid enemy spawn row ' + this.row);
     }
     
     if (gameState.stage.rowEnemyDirection[this.row] == 'right') this.spriteFlipped = false;
@@ -483,10 +481,10 @@ Enemy.prototype.update = function(dt) {
            (enemyDirection == 'left' && allEnemies[e].x < this.x) ) ) {
             var distanceApart = Math.abs(allEnemies[e].x - this.x) - colWidth;
             
-            if (distanceTraveled > distanceApart){
+            if (distanceTraveled > distanceApart) {
                 // Make an enemy behind a slower enemy boost the speed of the slower enemy
                 // But only up to the actual difference between the two enemies
-                if(allEnemies[e].speed < allEnemies[e].maxSpeed) {
+                if (allEnemies[e].speed < allEnemies[e].maxSpeed) {
                     var boost = 200 * dt;
                     var speedDifference = this.speed - allEnemies[e].speed;
                     
@@ -501,8 +499,8 @@ Enemy.prototype.update = function(dt) {
         }
     }
     
-    if(enemyDirection == 'right') this.x += distanceTraveled;
-    else if(enemyDirection == 'left') this.x -= distanceTraveled;
+    if (enemyDirection == 'right') this.x += distanceTraveled;
+    else if (enemyDirection == 'left') this.x -= distanceTraveled;
     
     // Update current column once the majority of the enemy sprite has traveled over into another tile
     if (enemyDirection == 'right' && this.x - this.col * colWidth > colWidth / 2) {
@@ -575,7 +573,7 @@ APlayer.prototype.renderPlayerElements = function() {
  * Display hearts at the top right of the canvas to show remaining player health
  */
 APlayer.prototype.renderHealth = function() {
-    for(var h = 1; h <= this.health; h++) {
+    for (var h = 1; h <= this.health; h++) {
         ctx.drawImage(Resources.get('images/Heart.png'), canvas.width - (22 * h), 0, 20, 34);
     }
 };
@@ -619,7 +617,7 @@ APlayer.prototype.update = function(dt) {
 
 // Receive keyboard input from event listener
 APlayer.prototype.handleInput = function(keyPressed) {
-    if(keyPressed !== undefined) {
+    if (keyPressed !== undefined) {
         if (keyPressed == 'up' || keyPressed == 'down' || keyPressed == 'left' || keyPressed == 'right') {
             this.upcomingMove = keyPressed;
         }
@@ -657,6 +655,7 @@ APlayer.prototype.die = function() {
         gameState.lose();
         this.changeCharacter();
     }
+    
     this.backToStart();
 };
 
