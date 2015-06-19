@@ -419,15 +419,16 @@ Enemy.prototype.update = function(dt) {
     
     var enemyDirection = gameState.stage.rowEnemyDirection[this.row];
     
-    // Don't let enemies overlap/overtake one another
+    // Don't let this enemy overlap/overtake other enemies
     for (e = 0; e < allEnemies.length; e++) {
-        if(allEnemies[e] !== this && allEnemies[e].row == this.row &&
+        if (allEnemies[e] !== this && allEnemies[e].row == this.row &&
            ( (enemyDirection == 'right' && allEnemies[e].x > this.x) ||
-           (enemyDirection == 'left' && allEnemies[e].x < this.x) ) ){
+           (enemyDirection == 'left' && allEnemies[e].x < this.x) ) ) {
             var distanceApart = Math.abs(allEnemies[e].x - this.x) - colWidth;
             
             if (distanceTraveled > distanceApart){
-                // An enemy behind a slower enemy will boost the speed of the slower enemy
+                // Make an enemy behind a slower enemy boost the speed of the slower enemy
+                // But only up to the actual difference between the two enemies
                 if(allEnemies[e].speed < allEnemies[e].maxSpeed) {
                     var boost = 200 * dt;
                     var speedDifference = this.speed - allEnemies[e].speed;
@@ -436,6 +437,7 @@ Enemy.prototype.update = function(dt) {
                     allEnemies[e].speedBoost(boost);
                 }
                 
+                //If there is some gap between the enemies, allow this enemy to travel the distance of the gap
                 if (distanceApart > 0) distanceTraveled = distanceApart;
                 else distanceTraveled = 0;
             }
@@ -445,7 +447,7 @@ Enemy.prototype.update = function(dt) {
     if(enemyDirection == 'right') this.x += distanceTraveled;
     else if(enemyDirection == 'left') this.x -= distanceTraveled;
     
-    // Update current column if necessary
+    // Update current column once the majority of the enemy sprite has traveled over into another tile
     if (enemyDirection == 'right' && this.x - this.col * colWidth > colWidth / 2) {
         this.col += 1;
     }
@@ -453,20 +455,23 @@ Enemy.prototype.update = function(dt) {
         this.col -= 1;
     }
     
-    this.checkCollision();
+    this.checkPlayerCollision();
     
+    // Once enemy travels offscreen, respawn it
     if (this.col > 6 || this.col < -1) {
         this.spawn();
     }
 }
 
-Enemy.prototype.checkCollision = function() {
-    // Check for collision with player
+Enemy.prototype.checkPlayerCollision = function() {
     if (this.row == player.row && this.col == player.col) {
         player.die();
     }
 }
 
+/*
+ * Boost the speed of an enemy, but only up to its maximum speed
+ */
 Enemy.prototype.speedBoost = function(boost) {
     if (this.speed < this.maxSpeed) {
         if (this.speed + boost > this.maxSpeed) this.speed = this.maxSpeed;
@@ -498,8 +503,8 @@ var APlayer = function() {
     this.backToStart();
     
     this.upcomingMove = null;
-    this.moveCooldown = 0;
-    this.moveCooldownTime = 0.25;
+    this.moveCooldown = 0;   // How many seconds are left before the player can move again
+    this.moveCooldownTime = 0.25;   // How many seconds must pass between each player move
 }
 APlayer.prototype = Object.create(Mortal.prototype);
 APlayer.prototype.constructor = APlayer;
@@ -509,6 +514,9 @@ APlayer.prototype.renderPlayerElements = function() {
     this.renderHealth();
 }
 
+/*
+ * Display hearts at the top right of the canvas to show remaining player health
+ */
 APlayer.prototype.renderHealth = function() {
     for(h = 1; h <= this.health; h++) {
         ctx.drawImage(Resources.get('images/Heart.png'), canvas.width - (22 * h), 0, 20, 34);
@@ -541,6 +549,7 @@ APlayer.prototype.update = function(dt) {
     }
     
     if (this.row == 0) {
+        // The player made it across!
         gameState.nextLevel();
         this.backToStart();
     }
@@ -549,16 +558,14 @@ APlayer.prototype.update = function(dt) {
     this.y = this.row * rowHeight;
 }
 
-// Receive key input from event listener
+// Receive keyboard input from event listener
 APlayer.prototype.handleInput = function(keyPressed) {
-    this.upcomingMove = null;
-    
     if(keyPressed !== undefined) {
         if (keyPressed == 'up' || keyPressed == 'down' || keyPressed == 'left' || keyPressed == 'right') {
             this.upcomingMove = keyPressed;
         }
         else if(keyPressed == 'c') {
-            // If player is still in grass, change character sprite
+            // If player is still in grass, let them change character sprite
             if (gameState.stage.rowTypes[this.row] != 'stone') {
                 this.changeCharacter();
             }
@@ -610,7 +617,7 @@ document.addEventListener('keyup', function(e) {
         38: 'up',
         39: 'right',
         40: 'down',
-        67: 'c'
+        67: 'c'   // added to let the player change character sprite
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
