@@ -288,28 +288,14 @@ AStage.prototype.updateForLevel = function(level) {
 }
 
 AStage.prototype.render = function() {
-    /* This array holds the relative URL to the image used
-     * for that particular row of the game level.
-     */
     var row, col;
-
-    /* Loop through the number of rows and columns we've defined above
-     * and, using the rowImages array, draw the correct image for that
-     * portion of the "grid"
-     */
+    
     for (row = 0; row < this.numRows; row++) {
         var rowType = this.rowTypes[row];
         if (rowType == 'water') cellSprite = 'images/water-block.png';
         else if (rowType == 'stone') cellSprite = 'images/stone-block.png';
         else if (rowType == 'grass') cellSprite = 'images/grass-block.png';
         for (col = 0; col < this.numCols; col++) {
-            /* The drawImage function of the canvas' context element
-             * requires 3 parameters: the image to draw, the x coordinate
-             * to start drawing and the y coordinate to start drawing.
-             * We're using our Resources helpers to refer to our images
-             * so that we get the benefits of caching these images, since
-             * we're using them over and over.
-             */
             ctx.drawImage(Resources.get(cellSprite), col * colWidth, row * rowHeight);
         }
     }
