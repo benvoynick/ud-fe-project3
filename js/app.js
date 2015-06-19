@@ -13,7 +13,7 @@ var AGameState = function() {
     this.currentTextMessageColor = 'black';
     
     this.stage = new AStage();
-}
+};
 
 AGameState.prototype.renderLevelText = function() {
     ctx.save();
@@ -23,7 +23,7 @@ AGameState.prototype.renderLevelText = function() {
     ctx.fillStyle = 'black';
     ctx.fillText('Level ' + this.level, 5, 0);
     ctx.restore();
-}
+};
 
 AGameState.prototype.renderMessageText = function() {
     if (this.currentTextMessageTimeLeft > 0 && this.currentTextMessage !== null) {
@@ -37,7 +37,7 @@ AGameState.prototype.renderMessageText = function() {
         ctx.strokeText(this.currentTextMessage, canvas.width / 2, 0);
         ctx.restore();
     }
-}
+};
 
 AGameState.prototype.respawnEnemies = function(newLevel) {
     if (newLevel === undefined) {
@@ -47,14 +47,14 @@ AGameState.prototype.respawnEnemies = function(newLevel) {
     for(var e = 0; e < allEnemies.length; e++) {
         allEnemies[e].spawn(newLevel);
     }
-}
+};
 
 AGameState.prototype.resetEnemies = function() {
     allEnemies = [];
     for(var e = 0; e < this.startingEnemyCount; e++) {
         allEnemies[e] = new Enemy();
     }
-}
+};
 
 AGameState.prototype.update = function(dt) {
     allEnemies.forEach(function(enemy) {
@@ -62,7 +62,7 @@ AGameState.prototype.update = function(dt) {
     });
     player.update(dt);
     this.updateText(dt);
-}
+};
 
 AGameState.prototype.updateText = function(dt) {
     this.currentTextMessageTimeLeft -= dt;
@@ -72,7 +72,7 @@ AGameState.prototype.updateText = function(dt) {
         this.currentTextMessagePriority = 0;
         this.currentTextMessageColor = 'black';
     }
-}
+};
 
 AGameState.prototype.nextLevel = function() {
     this.level++;
@@ -96,7 +96,7 @@ AGameState.prototype.nextLevel = function() {
     }
     
     this.respawnEnemies(true);
-}
+};
 
 AGameState.prototype.reset = function() {
     this.level = 1;
@@ -108,7 +108,7 @@ AGameState.prototype.reset = function() {
     this.resetEnemies();
     this.respawnEnemies(true);
     player.reset();
-}
+};
 
 AGameState.prototype.showTextMessage = function(text, secondsToDisplay, priority, color) {
     if (priority === undefined) priority = 0;
@@ -123,18 +123,18 @@ AGameState.prototype.showTextMessage = function(text, secondsToDisplay, priority
         else this.currentTextMessageColor = 'black';
     }
     
-}
+};
 
 AGameState.prototype.lose = function() {
     this.reset();
     
     this.showTextMessage('You Lost', 2.5, 10, 'red');
-}
+};
 
 AGameState.prototype.win = function() {
     gameState.showTextMessage('YOU WIN!', 5, 10, '#060');
     this.reset();
-}
+};
 
 
 
@@ -148,7 +148,7 @@ var AStage = function() {
     // Data for enemy spawns
     this.firstStoneRow = 1;
     this.lastStoneRow = 3;
-}
+};
 
 /*
  * Update the level layout based on AStage.levelData property
@@ -164,7 +164,7 @@ AStage.prototype.updateForLevel = function(level) {
     
     this.rowTypes = this.levelData[levelNumForData].rowTypes;
     this.rowEnemyDirection = this.levelData[levelNumForData].rowEnemyDirection;
-}
+};
 
 AStage.prototype.render = function() {
     var row, col;
@@ -179,7 +179,7 @@ AStage.prototype.render = function() {
             ctx.drawImage(Resources.get(cellSprite), col * colWidth, row * rowHeight);
         }
     }
-}
+};
 
 /*
  * Defines level layouts and enemy directions
@@ -382,7 +382,8 @@ var Mortal = function() {
     
     this.sprite = 'images/Gem Green.png';   // Fallback image, if this shows up in game a Mortal didn't set its sprite correctly
     this.spriteFlipped = false;   // If true, the render function will flip the sprite horizontally
-}
+};
+
 Mortal.prototype.render = function() {
     ctx.save();
     
@@ -399,7 +400,7 @@ Mortal.prototype.render = function() {
     
     ctx.drawImage(Resources.get(this.sprite), posX, this.y - this.yOffset);
     ctx.restore();
-}
+};
 
 
 
@@ -415,7 +416,7 @@ var Enemy = function() {
     this.maxSpeed = this.baseMaxSpeed;
     
     this.sprite = 'images/enemy-bug.png';
-}
+};
 Enemy.prototype = Object.create(Mortal.prototype);
 Enemy.prototype.constructor = Enemy;
 
@@ -463,7 +464,7 @@ Enemy.prototype.spawn = function(newLevel) {
     
     this.y = this.row * rowHeight;
     this.x = this.col * colWidth;
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -517,13 +518,13 @@ Enemy.prototype.update = function(dt) {
     if (this.col > 6 || this.col < -1) {
         this.spawn();
     }
-}
+};
 
 Enemy.prototype.checkPlayerCollision = function() {
     if (this.row == player.row && this.col == player.col) {
         player.die();
     }
-}
+};
 
 /*
  * Boost the speed of an enemy, but only up to its maximum speed
@@ -533,7 +534,7 @@ Enemy.prototype.speedBoost = function(boost) {
         if (this.speed + boost > this.maxSpeed) this.speed = this.maxSpeed;
         else this.speed += boost;
     }
-}
+};
 
 
 
@@ -561,14 +562,14 @@ var APlayer = function() {
     this.upcomingMove = null;
     this.moveCooldown = 0;   // How many seconds are left before the player can move again
     this.moveCooldownTime = 0.25;   // How many seconds must pass between each player move
-}
+};
 APlayer.prototype = Object.create(Mortal.prototype);
 APlayer.prototype.constructor = APlayer;
 
 APlayer.prototype.renderPlayerElements = function() {
     this.render();
     this.renderHealth();
-}
+};
 
 /*
  * Display hearts at the top right of the canvas to show remaining player health
@@ -577,7 +578,7 @@ APlayer.prototype.renderHealth = function() {
     for(var h = 1; h <= this.health; h++) {
         ctx.drawImage(Resources.get('images/Heart.png'), canvas.width - (22 * h), 0, 20, 34);
     }
-}
+};
 
 // Update the player's position
 // Parameter: dt, a time delta between ticks
@@ -614,7 +615,7 @@ APlayer.prototype.update = function(dt) {
     
     this.x = this.col * colWidth;
     this.y = this.row * rowHeight;
-}
+};
 
 // Receive keyboard input from event listener
 APlayer.prototype.handleInput = function(keyPressed) {
@@ -629,22 +630,22 @@ APlayer.prototype.handleInput = function(keyPressed) {
             }
         }
     }
-}
+};
 
 APlayer.prototype.changeCharacter = function() {
     this.currentCharacter++;
     if (this.currentCharacter > this.characters.length - 1) this.currentCharacter = 0;
     this.sprite = this.characters[this.currentCharacter];
-}
+};
 
 APlayer.prototype.backToStart = function() {
     this.col = 2;
     this.row = 5;
-}
+};
 
 APlayer.prototype.reset = function() {
     this.health = this.maxHealth;
-}
+};
 
 APlayer.prototype.die = function() {
     if (this.health > 1) {
@@ -657,7 +658,7 @@ APlayer.prototype.die = function() {
         this.changeCharacter();
     }
     this.backToStart();
-}
+};
 
 
 // Now instantiate your objects.
