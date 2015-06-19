@@ -94,197 +94,20 @@ var AStage = function() {
     this.lastStoneRow = 3;
 }
 
+/*
+ * Update the level layout based on AStage.levelData property
+ */
 AStage.prototype.updateForLevel = function(level) {
-    if (level <= 5) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'right',
-            'right',
-            'right',
-            null,
-            null
-        ]
+    levelNumForData = level;
+    
+    // Level data is allowed to be sparse - that is, there does not need to be an entry for every level.
+    // If there isn't data for this specific level, go back and use the most recent level layout preceding this one
+    while (!(levelNumForData in this.levelData) && levelNumForData > 1) {
+        levelNumForData--;
     }
-    else if (level <= 10) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'left',
-            'right',
-            'right',
-            null,
-            null
-        ]
-    }
-    else if (level <= 15) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'left',
-            'left',
-            'right',
-            null,
-            null
-        ]
-    }
-    else if (level <= 20) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'right',
-            'right',
-            'right',
-            null,
-            null
-        ]
-    }
-    else if (level <= 25) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'right',
-            'left',
-            'left',
-            null,
-            null
-        ]
-    }
-    else if (level <= 30) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'right',
-            'right',
-            'left',
-            null,
-            null
-        ]
-    }
-    else if (level <= 35) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'left',
-            'left',
-            'left',
-            null,
-            null
-        ]
-    }
-    else if (level <= 40) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'left',
-            'right',
-            'right',
-            null,
-            null
-        ]
-    }
-    else if (level <= 45) {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'right',
-            'left',
-            'right',
-            null,
-            null
-        ]
-    }
-    else {
-        this.rowTypes = [
-            'water',
-            'stone',
-            'stone',
-            'stone',
-            'grass',
-            'grass'
-        ]
-        
-        this.rowEnemyDirection = [
-            null,
-            'left',
-            'right',
-            'left',
-            null,
-            null
-        ]
-    }
+    
+    this.rowTypes = this.levelData[levelNumForData].rowTypes;
+    this.rowEnemyDirection = this.levelData[levelNumForData].rowEnemyDirection;
 }
 
 AStage.prototype.render = function() {
@@ -295,28 +118,229 @@ AStage.prototype.render = function() {
         if (rowType == 'water') cellSprite = 'images/water-block.png';
         else if (rowType == 'stone') cellSprite = 'images/stone-block.png';
         else if (rowType == 'grass') cellSprite = 'images/grass-block.png';
+        
         for (col = 0; col < this.numCols; col++) {
             ctx.drawImage(Resources.get(cellSprite), col * colWidth, row * rowHeight);
         }
     }
 }
 
+/*
+ * Defines level layouts and enemy directions
+ *
+ * Key is the first level number for which data will be used
+ *
+ * Each entry must have:
+ * A "rowTypes" array setting the tile type for all six rows
+ * A "rowEnemyDirection" array setting enemy direction as "left" or "right" for all stone tile rows
+ */
+AStage.prototype.levelData = {
+    1 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'right',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    },
+    6 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'left',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    },
+    11 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'left',
+            'left',
+            'right',
+            null,
+            null
+        ]
+    },
+    16 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'right',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    },
+    21 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'right',
+            'left',
+            'left',
+            null,
+            null
+        ]
+    },
+    26 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'right',
+            'right',
+            'left',
+            null,
+            null
+        ]
+    },
+    31 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'left',
+            'left',
+            'left',
+            null,
+            null
+        ]
+    },
+    36 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'left',
+            'right',
+            'right',
+            null,
+            null
+        ]
+    },
+    41 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'right',
+            'left',
+            'right',
+            null,
+            null
+        ]
+    },
+    46 : {
+        rowTypes : [
+            'water',
+            'stone',
+            'stone',
+            'stone',
+            'grass',
+            'grass'
+        ],
+        rowEnemyDirection : [
+            null,
+            'left',
+            'right',
+            'left',
+            null,
+            null
+        ]
+    }
+}
 
+
+/*
+ * This superclass is used as the basis for the Player and Enemy classes
+ */
 var Mortal = function() {
-    this.yOffset = 0; // How much to offset y position when drawing sprite on tile
+    this.yOffset = 0; // How much to offset a sprite's y position when drawing it on a tile
     
-    this.sprite = 'images/Gem Green.png';   // Fallback image, should not be used in real game
-    this.spriteFlipped = false;
+    this.sprite = 'images/Gem Green.png';   // Fallback image, if this shows up in game a Mortal didn't set its sprite correctly
+    this.spriteFlipped = false;   // If true, the render function will flip the sprite horizontally
 }
 Mortal.prototype.render = function() {
     ctx.save();
+    
     if (this.spriteFlipped) {
+        // If the sprite needs to be flipped horizontally, this .scale() call will reverse the sprite orientation
         ctx.scale(-1, 1);
+        // This .scale(-1, 1) call also reverses the sprite's horizontal position
+        // Because of this, sprite must render at the opposite horizontal position minus a column's width to end up in the correct spot
         posX = this.x * -1 - colWidth;
     }
     else {
         posX = this.x;
     }
+    
     ctx.drawImage(Resources.get(this.sprite), posX, this.y - this.yOffset);
     ctx.restore();
 }
@@ -328,8 +352,9 @@ var Enemy = function() {
     Mortal.call(this);
     
     this.yOffset = 25;
-    this.baseMinSpeed = 150;
-    this.baseMaxSpeed = 250;
+    this.baseMinSpeed = 150;   // The lowest speed an enemy can have
+    this.baseMaxSpeed = 250;   // The highest speed an enemy can have
+    // The below two variables are meant to be modified in the course of the game, as opposed to the base numbers above
     this.minSpeed = this.baseMinSpeed;
     this.maxSpeed = this.baseMaxSpeed;
     
@@ -338,6 +363,12 @@ var Enemy = function() {
 Enemy.prototype = Object.create(Mortal.prototype);
 Enemy.prototype.constructor = Enemy;
 
+/*
+ * Give an enemy a new position & speed at random.
+ *
+ * If newLevel is set to true, the enemy will be allowed to spawn in any column that isn't already occupied by an enemy.
+ * If newLevel is false (or not set) the enemy will be spawned in the proper offscreen column to make it traverse the row
+ */
 Enemy.prototype.spawn = function(newLevel) {
     if (newLevel === undefined) {
         newLevel = false;
