@@ -90,9 +90,9 @@ AGameState.prototype.nextLevel = function() {
     }
     
     for(e = 0; e < allEnemies.length; e++) {
-        // Move the allowed range of enemy speeds up by 2 per level
-        allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + (this.level * 2) - 2;
-        allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + (this.level * 2) - 2;
+        // Increase the allowed range of enemy speeds up by 2 per level after level 1
+        allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + ( (this.level - 1) * 2);
+        allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + ( (this.level - 1) * 2);
     }
     
     this.respawnEnemies(true);
