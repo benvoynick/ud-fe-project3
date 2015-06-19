@@ -55,15 +55,20 @@ AGameState.prototype.nextLevel = function() {
     this.respawnEnemies(true);
 }
 
-AGameState.prototype.lose = function() {
+AGameState.prototype.reset = function() {
     this.level = 1;
     this.stage.updateForLevel(this.level);
     this.resetEnemies();
     this.respawnEnemies(true);
+    player.reset();
+}
+
+AGameState.prototype.lose = function() {
+    this.reset();
 }
 
 AGameState.prototype.win = function() {
-    this.lose();
+    this.reset();
 }
 
 
@@ -544,13 +549,16 @@ APlayer.prototype.backToStart = function() {
     this.row = 5;
 }
 
+APlayer.prototype.reset = function() {
+    this.health = this.maxHealth;
+}
+
 APlayer.prototype.die = function() {
     if (this.health > 1) {
         this.health--;
     }
     else {
         gameState.lose();
-        this.health = this.maxHealth;
         this.changeCharacter();
     }
     this.backToStart();
