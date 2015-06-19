@@ -56,6 +56,14 @@ AGameState.prototype.resetEnemies = function() {
 }
 
 AGameState.prototype.update = function(dt) {
+    allEnemies.forEach(function(enemy) {
+        enemy.update(dt);
+    });
+    player.update(dt);
+    this.updateText(dt);
+}
+
+AGameState.prototype.updateText = function(dt) {
     this.currentTextMessageTimeLeft -= dt;
     if (this.currentTextMessageTimeLeft <= 0) {
         this.currentTextMessageTimeLeft = 0;
