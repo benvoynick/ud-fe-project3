@@ -1,3 +1,8 @@
+/*
+ * AGameState stores high level data and methods
+ * 
+ * Also contains stage (level) data as property AGameState.stage, see AStage below
+ */
 var AGameState = function() {
     this.level = 1;
     this.startingEnemyCount = 3;
@@ -47,7 +52,7 @@ AGameState.prototype.nextLevel = function() {
     }
     
     for(e = 0; e < allEnemies.length; e++) {
-        //allEnemies[e] = new Enemy();
+        // Move the allowed range of enemy speeds up by 2 per level
         allEnemies[e].minSpeed = allEnemies[e].baseMinSpeed + (this.level * 2) - 2;
         allEnemies[e].maxSpeed = allEnemies[e].baseMaxSpeed + (this.level * 2) - 2;
     }
@@ -58,6 +63,10 @@ AGameState.prototype.nextLevel = function() {
 AGameState.prototype.reset = function() {
     this.level = 1;
     this.stage.updateForLevel(this.level);
+    
+    player.currentCharacter = Resources.getRandomInt(0, player.characters.length - 1);
+    player.changeCharacter();
+    
     this.resetEnemies();
     this.respawnEnemies(true);
     player.reset();

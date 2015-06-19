@@ -134,9 +134,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        player.currentCharacter = Resources.getRandomInt(0, player.characters.length - 1);
-        player.changeCharacter();
-        gameState.lose();
+        gameState.reset();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
