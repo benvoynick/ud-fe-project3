@@ -375,21 +375,26 @@ Enemy.prototype.spawn = function(newLevel) {
     }
     
     this.speed = Resources.getRandomInt(this.minSpeed, this.maxSpeed);
-    this.row = Resources.getRandomInt(gameState.stage.firstStoneRow, gameState.stage.lastStoneRow);
     if(newLevel) {
         this.col = null;
         while (this.col === null) {
+            this.row = Resources.getRandomInt(gameState.stage.firstStoneRow, gameState.stage.lastStoneRow);
+            
             possCol = Resources.getRandomInt(-1, gameState.stage.numCols);
+            
             for(var e = 0; e < allEnemies.length; e++) {
                 if (allEnemies[e] !== this && allEnemies[e].col == possCol) {
                     possCol = null;
                     break;
                 }
             }
+            
             this.col = possCol;
         }
     }
     else {
+        this.row = Resources.getRandomInt(gameState.stage.firstStoneRow, gameState.stage.lastStoneRow);
+        
         if (gameState.stage.rowEnemyDirection[this.row] == 'right') this.col = -1;
         else if(gameState.stage.rowEnemyDirection[this.row] == 'left') this.col = gameState.stage.numCols + 1;
         else {
